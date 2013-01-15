@@ -3,24 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 
 class GuzzlecalServiceProvider extends ServiceProvider {
-
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
-
-	/**
-	 * Bootstrap the application events.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		$this->package('ekotechnology/guzzlecal');
-	}
-
+	
 	/**
 	 * Register the service provider.
 	 *
@@ -28,17 +11,8 @@ class GuzzlecalServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app['guzzlecal'] = function($app) {
+			return new GuzzleCal;
+		};
 	}
-
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
-	public function provides()
-	{
-		return array();
-	}
-
 }
