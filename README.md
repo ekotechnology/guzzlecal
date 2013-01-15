@@ -1,6 +1,6 @@
 # Guzzlecal
 
-Google Calendar Client that uses [Guzzle](http://github.com/guzzle/guzzle) at its core.
+Google Calendar Client that uses [Guzzle](http://guzzlephp.org) at its core.
 
 
 ## Features
