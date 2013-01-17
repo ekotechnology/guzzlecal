@@ -12,7 +12,7 @@ class GuzzlecalServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->app['guzzlecal'] = function($app) {
-			return new GuzzleCal;
+			return new Guzzlecal;
 		};
 	}
 }

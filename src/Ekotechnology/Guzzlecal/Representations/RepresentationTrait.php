@@ -94,7 +94,6 @@ trait RepresentationTrait {
 	 * @param array $exceptions    Allows you to not include values in the filled object
 	 */
 	function __construct($json, $exceptions=array()) {
-		// var_dump($json);
 		$mutators[] = array(
 			'fields' => array('created', 'updated', 'start', 'finish'),
 			'handler' => function($input, $key) {
