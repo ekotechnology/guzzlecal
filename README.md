@@ -27,16 +27,19 @@ Google Calendar Client that uses [Guzzle](http://guzzlephp.org) at its core.
 * View/Update metadata on events
 * Delete single or recurring events
 
+### Free/Busy Queries
+* Allows you to query for times that are marked as `Busy` on the calendar
+
 ## Installation
 ### Install via Composer
 ### Install via Git/Filesystem
-> If you are going to use this method, it is suggested that you follow the repository so that you can integrate any security patches or bug fixes as soon as possible.
+> If you are going to use this method, it is suggested that you star the repository so that you can integrate any security patches or bug fixes as soon as possible.
 
 ## Use with Laravel 4
 > This package was built for and within Laravel 4, although the goal is that it will function properly in other PHP projects.  See the section below for more info.
 
 ### Configuration
-Guzzlecal ships with a Service Provider and Facade so that it can tie in very nicely with Laravel 4, including dependency injection and testing. Once you've installed Guzzlecal, configuring it for Laravel is pretty simple.  You just need to add an entry in for the Service Provider and the Facade.
+Guzzlecal ships with a Service Provider and Facade so that it can tie in very nicely with Laravel 4. Once you've installed Guzzlecal, configuring it for Laravel is pretty simple.  You just need to add an entry in for the Service Provider and the Facade.
 
 From the base directory of your app, you need to go to the app configuration file which is found in app/config/app.php.  You'll need to add an entry in the `providers` array with a value of `Ekotechnology\Guzzlecal\GuzzlecalServiceProvider`.  This might make your `providers` array look something like this:
 
@@ -77,3 +80,4 @@ Now, we just need to register the alias for the Facade.  So in the `aliases` arr
 ### Example
 
 ## Use outside of Laravel 4
+If you're not using Laravel 4, hopefully we can still get you up and running in your application.
