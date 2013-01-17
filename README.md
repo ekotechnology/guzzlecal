@@ -30,6 +30,9 @@ Google Calendar Client that uses [Guzzle](http://guzzlephp.org) at its core.
 ### Free/Busy Queries
 * Allows you to query for times that are marked as `Busy` on the calendar
 
+### Custom Requests
+* If you don't want to use the response representations provided via Guzzlecal, we provide a passthru option that will just give you an OAuth2 authenticated Guzzle client that you can do whatever you want on.  If you're using `offline` mode, expired tokens will still be refreshed for you automatically.
+
 ## Installation
 ### Install via Composer
 ### Install via Git/Filesystem

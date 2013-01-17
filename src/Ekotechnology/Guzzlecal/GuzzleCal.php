@@ -35,4 +35,8 @@ class Guzzlecal {
 	public function handleOauth() {
 		return $this->oauth->handleOauth();
 	}
+
+	public function getClient() {
+		return $this->client;
+	}
 }
