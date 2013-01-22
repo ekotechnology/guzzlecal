@@ -1,6 +1,6 @@
 {
     "name": "ekotechnology/guzzlecal",
-    "description": "",
+    "description": "Google Calendar client that uses Guzzle",
     "authors": [
         {
             "name": "Trea Hauet",
