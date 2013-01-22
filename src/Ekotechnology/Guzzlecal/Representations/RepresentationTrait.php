@@ -75,9 +75,10 @@ trait RepresentationTrait {
 	/**
 	 * Get the items from the input (each of which will be an object)
 	 * If there aren't any, just an empty array
+	 * @param  string  Secondary key to fetch
 	 * @return array
 	 */
-	function items() {
+	function items($secondary='') {
 		if (array_key_exists('items', $this->content)) {
 			return $this->content['items'];
 		}

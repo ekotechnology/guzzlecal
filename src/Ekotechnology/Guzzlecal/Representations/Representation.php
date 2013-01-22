@@ -3,7 +3,6 @@
 interface Representation {
 	function className();
 	function identify();
-	function etag();
-	function items();
+	function items($secondary='');
 	function __construct($data, $exceptions=array());
 }
