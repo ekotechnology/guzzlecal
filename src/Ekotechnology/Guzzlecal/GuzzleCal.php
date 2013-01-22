@@ -27,10 +27,7 @@ class Guzzlecal {
 		return new EventsList($this->client->get('calendars/' . urlencode($calendar) .'/events')->send()->json(), $exceptions);
 	}
 	public function createEvent(\Ekotechnology\Guzzlecal\Representations\NewEvent $event) {
-
-		$resp = $this->client->post('calendars/' . $event->calendarId . '/events')->setHeader('Content-Type', 'application/json')->setBody($event->toJSON())->send()->json();
-
-		return new Event($resp);
+		return new Event($this->client->post('calendars/' . $event->calendarId . '/events')->setHeader('Content-Type', 'application/json')->setBody($event->toJSON())->send()->json());
 	}
 	public function freeBusy($calendars = array(), \DateTime $timeMin, \DateTime $timeMax, $exceptions=array()) {
 		$params = array(
