@@ -94,7 +94,7 @@ trait RepresentationTrait {
 	 * @param mixed $json          Anything that can be run through foreach
 	 * @param array $exceptions    Allows you to not include values in the filled object
 	 */
-	function __construct($json, $exceptions=array()) {
+	function __construct($json=array(), $exceptions=array()) {
 		$mutators[] = array(
 			'fields' => array('created', 'updated', 'start', 'finish'),
 			'handler' => function($input, $key) {
@@ -149,5 +149,15 @@ trait RepresentationTrait {
 		if (array_key_exists($name, $this->content)) {
 			return $this->content[$name];
 		}
+	}
+	/**
+	 * Magic Set allows us to call on the content of the object
+	 * (that is actually stored in the object's content array)
+	 * @param  string $name The key to which you want the value
+	 * @param  string $value The value
+	 * @return mixed
+	 */
+	function __set($name, $value) {
+		return $this->content[$name] = $value;
 	}
 }

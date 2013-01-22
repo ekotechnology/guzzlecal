@@ -2,6 +2,7 @@
 use Ekotechnology\Guzzlecal\Representations\CalendarList;
 use Ekotechnology\Guzzlecal\Representations\EventsList;
 use Ekotechnology\Guzzlecal\Representations\FreeBusyQuery;
+use Ekotechnology\Guzzlecal\Representations\Event;
 use Ekotechnology\Guzzlecal\Auth\GoogleOauth2;
 
 use Guzzle\Http\Client;
@@ -16,6 +17,7 @@ class Guzzlecal {
 		$this->client = $client->addSubscriber($this->oauth);
 
 	}
+	
 	public function calendarsList($exceptions=array()) {
 		$raw = $this->client->get('users/me/calendarList')->send()->json();
 		return new CalendarList($raw, $exceptions);
@@ -24,7 +26,12 @@ class Guzzlecal {
 	public function eventsList($calendar, $exceptions=array()) {
 		return new EventsList($this->client->get('calendars/' . urlencode($calendar) .'/events')->send()->json(), $exceptions);
 	}
+	public function createEvent(\Ekotechnology\Guzzlecal\Representations\NewEvent $event) {
 
+		$resp = $this->client->post('calendars/' . $event->calendarId . '/events')->setHeader('Content-Type', 'application/json')->setBody($event->toJSON())->send()->json();
+
+		return new Event($resp);
+	}
 	public function freeBusy($calendars = array(), \DateTime $timeMin, \DateTime $timeMax, $exceptions=array()) {
 		$params = array(
 			'items' => $calendars,
