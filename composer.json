@@ -2,6 +2,7 @@
     "name": "ekotechnology/guzzlecal",
     "description": "Google Calendar client that uses Guzzle",
     "keywords": ["google","calendar", "guzzle", "oauth2"],
+    "homepage": "http://github.com/ekotechnology/guzzlecal",
     "authors": [
         {
             "name": "Trea Hauet",
