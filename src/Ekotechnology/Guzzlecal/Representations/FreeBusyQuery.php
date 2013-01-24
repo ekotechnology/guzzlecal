@@ -9,6 +9,12 @@ class FreeBusyQuery implements Representation {
 	protected $content = array();
 
 	/**
+	 * Store the mutators for fields
+	 * @var array
+	 */
+	protected $mutators = array();
+
+	/**
 	 * Returns the name of the class with no namespace
 	 * @return string Class Name
 	 */
@@ -58,22 +64,6 @@ class FreeBusyQuery implements Representation {
 	 * @param array  $exceptions [description]
 	 */
 	function __construct($data, $exceptions=array()) {
-		$time = function($input, $key) {
-			if (is_array($input)) {
-				if (array_key_exists('date', $input)) {
-					return new \DateTime($input['date']);
-				}
-				if (array_key_exists('dateTime', $input)) {
-					return new \DateTime($input['dateTime']);
-				}
-				return $input;
-			}
-			else {
-				return new \DateTime($input);
-			}
-		};
-		$mutators['start'] = $time;
-		$mutators['end'] = $time;
 
 		foreach ($data as $key => $val) {
 			if (!is_array($val)) {
@@ -82,17 +72,108 @@ class FreeBusyQuery implements Representation {
 			elseif ($key == 'calendars') {
 				foreach ($val as $calendar => $instances) {
 					foreach ($instances as $key => $val) {
-							$mutator = $mutators['start'];
-							foreach ($val as $instance => $times) {
-								$this->content['items'][$calendar][] = array(
-									'start' => $mutator($times['start'], 'start'),
-									'end' => $mutator($times['end'], 'end')
-								);
-							}
+						foreach ($val as $instance => $times) {
+							$this->content['items'][$calendar][] = array(
+								'start' => $times['start'],
+								'end' => $times['end']
+							);
+						}
 					}
 				}
 			}				
 		}
 	}
+
+	/**
+	 * Adds the mutators to the object level
+	 * ($this->mutators)
+	 * @return void
+	 */
+	protected function generateMutators() {
+		$mutators[] = array(
+			'fields' => array('created', 'updated', 'start', 'finish'),
+			'get' => function($input, $key) {
+				if (is_array($input)) {
+					if (array_key_exists('date', $input)) {
+						return new \DateTime($input['date']);
+					}
+					if (array_key_exists('dateTime', $input)) {
+						return new \DateTime($input['dateTime']);
+					}
+					return $input;
+				}
+				else {
+					return new \DateTime($input);
+					
+				}
+			},
+			'set' => function($input, $key) {
+				if ($input instanceOf \DateTime) {
+					return array('dateTime' => $input->format('c'));
+				}
+				else {
+					return $input;
+				}
+			}
+		);
+		$this->mutators = $mutators;
+	}
+
+	/**
+	 * Determines if a field has a mutator or not
+	 * @param  string  $key    Field name to find mutator for
+	 * @param  string  $return 'get'  or 'set', or nothing to just check existence
+	 * @return mixed           Either returns the requested mutator, true, or false if not found
+	 */
+	protected function hasMutator($key, $return='') {
+		foreach ($this->mutators as $mutator) {
+			if (in_array($key, $mutator['fields'])) {
+				if ($return == 'get') {
+					return $mutator['get'];
+				}
+				elseif ($return == 'set') {
+					return $mutator['set'];
+				}
+				else {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Magic Get allows us to call on the content of the object
+	 * (that is actually stored in the object's content array)
+	 * @param  string $name The key to which you want the value
+	 * @return mixed
+	 */
+	function __get($name) {
+		if (array_key_exists($name, $this->content)) {
+			if ($m = $this->hasMutator($name, 'get')) {
+				return $m($this->content[$name], $name);
+			}
+			else {
+				return $this->content[$name];
+			}
+		}
+	}
+	
+	/**
+	 * Magic Set allows us to call on the content of the object
+	 * (that is actually stored in the object's content array)
+	 * @param  string $name The key to which you want the value
+	 * @param  string $value The value
+	 * @return mixed
+	 */
+	function __set($name, $value) {
+		if ($m = $this->hasMutator($name, 'set')) {
+			return $this->content[$name] = $m($value, $name);
+		}
+		else {
+			return $this->content[$name] = $value;
+		}
+	}
+
 
 }
