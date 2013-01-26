@@ -132,7 +132,7 @@ class Oauth2 implements EventSubscriberInterface {
 	public function handleOauth() {
 		$this->ensureInput();
 
-		if ($this->input['error']) {
+		if (array_key_exists('error', $this->input)) {
 			throw new ClientDeniedException;
 		}
 		elseif ($this->input['code']) {
