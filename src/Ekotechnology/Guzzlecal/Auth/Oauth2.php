@@ -8,10 +8,10 @@ use Guzzle\Http\Message\EntityEnclosingRequestInterface;
 use Guzzle\Http\Url;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Ekotechnology\GuzzleCal\Exceptions\ClientDeniedException;
-use Ekotechnology\GuzzleCal\Exceptions\UnexpectedInput;
-use Ekotechnology\GuzzleCal\Exceptions\KeyExpired;
-use Ekotechnology\GuzzleCal\Exceptions\InvalidRefresh;
+use Ekotechnology\Guzzlecal\Exceptions\ClientDeniedException;
+use Ekotechnology\Guzzlecal\Exceptions\UnexpectedInput;
+use Ekotechnology\Guzzlecal\Exceptions\KeyExpired;
+use Ekotechnology\Guzzlecal\Exceptions\InvalidRefresh;
 
 
 class Oauth2 implements EventSubscriberInterface {
@@ -20,6 +20,15 @@ class Oauth2 implements EventSubscriberInterface {
 	 * @var Collection Configuration settings
 	 */
 	protected static $config;
+
+	/**
+	 * There are some cases where we can't access GET input from $_GET
+	 * (namely CodeIgniter), so $this->ensureInput() will either put it here
+	 * if it is found in $_GET or it will build it from the query string and 
+	 * put it here.
+	 * @var array
+	 */
+	protected $input;
 
 	const URL_STUB = 'https://accounts.google.com/o/oauth2';
 	const AUTH_URL = 'https://accounts.google.com/o/oauth2/auth';
@@ -121,14 +130,16 @@ class Oauth2 implements EventSubscriberInterface {
 	}
 
 	public function handleOauth() {
-		if ($_GET['error']) {
+		$this->ensureInput();
+
+		if ($this->input['error']) {
 			throw new ClientDeniedException;
 		}
-		elseif ($_GET['code']) {
+		elseif ($this->input['code']) {
 			// Now go get our tokens!
 			$client = new Client(self::URL_STUB);
 			$params = array(
-				'code' => $_GET['code'],
+				'code' => $this->input['code'],
 				'client_id' => self::$config['clientId'],
 				'client_secret' => self::$config['clientSecret'],
 				'redirect_uri' => self::$config['redirectUri'],
@@ -149,6 +160,16 @@ class Oauth2 implements EventSubscriberInterface {
 		}
 		else {
 			throw new UnexpectedInput;
+		}
+	}
+
+	protected function ensureInput () {
+		if (!isset($_GET)) {
+			// Sigh.  Probably Codeigniter killed the $_GET vars.
+			parse_str($_SERVER['QUERY_STRING'], $this->input); 
+		}
+		else {
+			$this->input = $_GET;
 		}
 	}
 }
