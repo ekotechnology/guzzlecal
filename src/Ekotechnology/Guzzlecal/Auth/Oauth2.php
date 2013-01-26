@@ -121,14 +121,14 @@ class Oauth2 implements EventSubscriberInterface {
 	}
 
 	public function handleOauth() {
-		if (\Input::get('error')) {
+		if ($_GET['error']) {
 			throw new ClientDeniedException;
 		}
-		elseif (\Input::get('code')) {
+		elseif ($_GET['code']) {
 			// Now go get our tokens!
 			$client = new Client(self::URL_STUB);
 			$params = array(
-				'code' => \Input::get('code'),
+				'code' => $_GET['code'],
 				'client_id' => self::$config['clientId'],
 				'client_secret' => self::$config['clientSecret'],
 				'redirect_uri' => self::$config['redirectUri'],
