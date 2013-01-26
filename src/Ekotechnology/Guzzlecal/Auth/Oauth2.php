@@ -14,7 +14,7 @@ use Ekotechnology\GuzzleCal\Exceptions\KeyExpired;
 use Ekotechnology\GuzzleCal\Exceptions\InvalidRefresh;
 
 
-class GoogleOauth2 implements EventSubscriberInterface {
+class Oauth2 implements EventSubscriberInterface {
 
 	/**
 	 * @var Collection Configuration settings
