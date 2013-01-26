@@ -3,7 +3,7 @@ use Ekotechnology\Guzzlecal\Representations\CalendarList;
 use Ekotechnology\Guzzlecal\Representations\EventsList;
 use Ekotechnology\Guzzlecal\Representations\FreeBusyQuery;
 use Ekotechnology\Guzzlecal\Representations\Event;
-use Ekotechnology\Guzzlecal\Auth\GoogleOauth2;
+use Ekotechnology\Guzzlecal\Auth\Oauth2;
 
 use Guzzle\Http\Client;
 
@@ -12,7 +12,7 @@ class Guzzlecal {
 	var $client;
 
 	public function init($config = array()) {
-		$this->oauth = new GoogleOauth2($config);
+		$this->oauth = new Oauth2($config);
 		$client = new Client('https://www.googleapis.com/calendar/v3/');
 		$this->client = $client->addSubscriber($this->oauth);
 
