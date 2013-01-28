@@ -23,9 +23,14 @@ class Guzzlecal {
 		return new CalendarList($raw, $exceptions);
 	}
 
+	public function createCalendar(\Ekotechnology\Guzzlecal\Representations\Calendar $cal) {
+		return new Calendar($this->client->post('calendars')->setHeader('Content-Type', 'application/json')->setBody($cal->toJSON())->send()->json());
+	}
+
 	public function eventsList($calendar, $exceptions=array()) {
 		return new EventsList($this->client->get('calendars/' . urlencode($calendar) .'/events')->send()->json(), $exceptions);
 	}
+
 
 	public function createEvent(\Ekotechnology\Guzzlecal\Representations\NewEvent $event) {
 		return new Event($this->client->post('calendars/' . $event->calendarId . '/events')->setHeader('Content-Type', 'application/json')->setBody($event->toJSON())->send()->json());
