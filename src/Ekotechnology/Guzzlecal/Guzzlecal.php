@@ -1,4 +1,5 @@
 <?php namespace Ekotechnology\Guzzlecal;
+use Ekotechnology\Guzzlecal\Representations\Calendar;
 use Ekotechnology\Guzzlecal\Representations\CalendarList;
 use Ekotechnology\Guzzlecal\Representations\EventsList;
 use Ekotechnology\Guzzlecal\Representations\FreeBusyQuery;
