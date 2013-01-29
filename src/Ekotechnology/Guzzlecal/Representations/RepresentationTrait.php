@@ -209,4 +209,8 @@ trait RepresentationTrait {
 			return $this->content[$name] = $value;
 		}
 	}
+
+	function toJSON() {
+		return json_encode($this->content);
+	}
 }
