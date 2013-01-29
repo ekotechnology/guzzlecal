@@ -77,6 +77,9 @@ class Oauth2 implements EventSubscriberInterface {
 
 	protected function _buildAuthorizationHeader() {
 		$storage = self::$config['storage']['getToken'];
+		if ($id = self::getConfig('userID') ) {
+			return 'Bearer ' . $storage($id);
+		}
 		return 'Bearer ' . $storage();
 	}
 
@@ -86,12 +89,22 @@ class Oauth2 implements EventSubscriberInterface {
 			// and then sign a new request with the new access token
 			if ($storage = self::$config['storage']['getRefresh']) {
 				$client = new Client(self::URL_STUB);
-				$params = array(
-					'refresh_token' => $storage(),
-					'client_id' => self::$config['clientId'],
-					'client_secret' => self::$config['clientSecret'],
-					'grant_type' => 'refresh_token',
-				);
+				if ($id = self::getConfig('userID')) {
+					$params = array(
+						'refresh_token' => $storage($id),
+						'client_id' => self::$config['clientId'],
+						'client_secret' => self::$config['clientSecret'],
+						'grant_type' => 'refresh_token',
+					);
+				}
+				else {
+					$params = array(
+						'refresh_token' => $storage(),
+						'client_id' => self::$config['clientId'],
+						'client_secret' => self::$config['clientSecret'],
+						'grant_type' => 'refresh_token',
+					);
+				}
 				try {
 					$response = $client->post('token')->addPostFields($params)->send();
 				} catch (Guzzle\Http\Exception\ClientErrorResponseException $e) {
@@ -100,7 +113,12 @@ class Oauth2 implements EventSubscriberInterface {
 				foreach ($response->json() as $key => $val) {
 					if ($key == 'access_token') {
 						$storage = self::$config['storage']['token'];
-						$storage($val);
+						if ($id = self::getConfig('userID') ) {
+							$storage($val);
+						}
+						else {
+							$storage($val, $id);
+						}
 					}
 				}
 				$newRequest = clone $event['request'];
@@ -149,11 +167,21 @@ class Oauth2 implements EventSubscriberInterface {
 			foreach ($response->json() as $key => $val) {
 				if ($key == 'refresh_token') {
 					$storage = self::$config['storage']['refresh'];
-					$storage($val);
+					if ($id = self::getConfig('userID') ) {
+						$storage($val);
+					}
+					else {
+						$storage($val, $id);
+					}
 				}
 				if ($key == 'access_token') {
 					$storage = self::$config['storage']['token'];
-					$storage($val);
+					if ($id = self::getConfig('userID') ) {
+						$storage($val, $id);
+					}
+					else {
+						$storage($val);
+					}
 				}
 			}
 			return true;
@@ -162,7 +190,14 @@ class Oauth2 implements EventSubscriberInterface {
 			throw new UnexpectedInput;
 		}
 	}
-
+	public function updateConfig($key, $value) {
+		$config = self::$config;
+		return $config->set($key, $value);
+	}
+	protected function getConfig($key) {
+		$config = self::$config;
+		return $config->get($key);
+	}
 	protected function ensureInput () {
 		if (!isset($_GET)) {
 			// Sigh.  Probably Codeigniter killed the $_GET vars.

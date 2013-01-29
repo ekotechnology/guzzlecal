@@ -67,4 +67,12 @@ class Guzzlecal {
 	public function getClient() {
 		return $this->client;
 	}
+
+	public function setUID($id) {
+		return $this->oauth->updateConfig('userID', $id);
+	}
+
+	public function setConfig($key, $value) {
+		return $this->oauth->updateConfig($key, $value);
+	}
 }
