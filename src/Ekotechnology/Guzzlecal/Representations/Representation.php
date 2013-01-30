@@ -4,5 +4,5 @@ interface Representation {
 	function className();
 	function identify();
 	function items($secondary='');
-	function __construct($data=array(), $exceptions=array());
+	function __construct($data, $exceptions=array());
 }
