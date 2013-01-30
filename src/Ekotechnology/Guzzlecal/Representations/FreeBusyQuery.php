@@ -64,7 +64,7 @@ class FreeBusyQuery implements Representation {
 	 * @param array  $exceptions [description]
 	 */
 	function __construct($data, $exceptions=array()) {
-
+		$this->generateMutators();
 		foreach ($data as $key => $val) {
 			if (!is_array($val)) {
 				$this->content[$key] = $val;
@@ -84,6 +84,43 @@ class FreeBusyQuery implements Representation {
 		}
 	}
 
+	function toMutated($in=array()) {
+		$mutated = array();
+		foreach ($this->content as $key => $val) {
+			if (!is_array($val)) {
+				$mutated[$key] = $this->mutateStr($key, $val);
+			}
+			else {
+				$mutated[$key] = $this->mutateArr($val);
+			}
+		}
+		return $mutated;
+	}
+	protected function mutateStr($key, $val) {
+		if ($m = $this->hasMutator($key, 'get')) {
+			return $m($val, $key);
+		}
+		else {
+			return $val;
+		}
+	}
+	protected function mutateArr($input=array()) {
+		$mutated = array();
+		foreach ($input as $key => $val) {
+			if (!is_array($val)) {
+				if ($m = $this->hasMutator($key, 'get')) {
+					$mutated[$key] = $m($val, $key);
+				}
+				else {
+					$mutated[$key] = $val;
+				}
+			}
+			else {
+				$mutated[$key] = $this->mutateArr($val);
+			}
+		}
+		return $mutated;
+	}
 	/**
 	 * Adds the mutators to the object level
 	 * ($this->mutators)
@@ -91,7 +128,7 @@ class FreeBusyQuery implements Representation {
 	 */
 	protected function generateMutators() {
 		$mutators[] = array(
-			'fields' => array('created', 'updated', 'start', 'finish', 'end'),
+			'fields' => array('created', 'updated', 'start', 'finish', 'end', 'timeMin', 'timeMax'),
 			'get' => function($input, $key) {
 				if (is_array($input)) {
 					if (array_key_exists('date', $input)) {
