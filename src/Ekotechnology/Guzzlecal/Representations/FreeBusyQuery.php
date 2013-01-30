@@ -64,7 +64,7 @@ class FreeBusyQuery implements Representation {
 	 * @param array  $exceptions [description]
 	 */
 	function __construct($data, $exceptions=array()) {
-
+		$this->generateMutators();
 		foreach ($data as $key => $val) {
 			if (!is_array($val)) {
 				$this->content[$key] = $val;
@@ -74,8 +74,8 @@ class FreeBusyQuery implements Representation {
 					foreach ($instances as $key => $val) {
 						foreach ($val as $instance => $times) {
 							$this->content['items'][$calendar][] = array(
-								'start' => $times['start'],
-								'end' => $times['end']
+								'start' => $this->mutate('start', $times['start']),
+								'end' => $this->mutate('end', $times['end'])
 							);
 						}
 					}
@@ -91,7 +91,7 @@ class FreeBusyQuery implements Representation {
 	 */
 	protected function generateMutators() {
 		$mutators[] = array(
-			'fields' => array('created', 'updated', 'start', 'finish'),
+			'fields' => array('created', 'updated', 'start', 'finish', 'end'),
 			'get' => function($input, $key) {
 				if (is_array($input)) {
 					if (array_key_exists('date', $input)) {
@@ -117,6 +117,14 @@ class FreeBusyQuery implements Representation {
 			}
 		);
 		$this->mutators = $mutators;
+	}
+
+	protected function mutate($key, $value) {
+		if ($this->hasMutator($key, 'get')) {
+			$m = $this->hasMutator($key, 'get');
+			return $m($value, $key);
+		}
+		return $value;
 	}
 
 	/**
