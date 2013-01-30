@@ -48,8 +48,11 @@ class Guzzlecal {
 	// public function patchEvent($calendar, )
 
 	public function freeBusy($calendars = array(), \DateTime $timeMin, \DateTime $timeMax, $exceptions=array()) {
+		foreach ($calendars as $cal) {
+			$cals[] = array('id' => $cal);
+		}
 		$params = array(
-			'items' => $calendars,
+			'items' => $cals,
 			'timeMin' => $timeMin->format('c'),
 			'timeMax' => $timeMax->format('c')
 		);
