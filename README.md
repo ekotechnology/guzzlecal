@@ -35,8 +35,14 @@ Google Calendar Client that uses [Guzzle](http://guzzlephp.org) at its core.
 
 ## Installation
 ### Install via Composer
-### Install via Git/Filesystem
+Depending on what version of Guzzlecal you want to use, your settings will vary.  The goal is to keep the most stable version of this package in master, with the develop branch containing bleeding edge changes.  When you want to lock in to a specific version (and you _should_ for anything important), then you'll want to use a require line in your composer.json that might look like `"ekotechnology/guzzlecal": "0.2"`, etc.  If you want to follow along with the bleeding edge (_Not suggested for anything important._), you can do `"ekotechnology/guzzlecal": "dev-develop"` as your requirement.
+
+If you'd rather not muck around with your composer.json manually, you can just search for Guzzlecal when adding requirements with the composer command.
+
+
+### Install via Git/Filesystem 
 > If you are going to use this method, it is suggested that you star the repository so that you can integrate any security patches or bug fixes as soon as possible.
+
 
 ## Use with Laravel 4
 > This package was built for and within Laravel 4, although the goal is that it will function properly in other PHP projects.  See the section below for more info.
@@ -83,4 +89,4 @@ Now, we just need to register the alias for the Facade.  So in the `aliases` arr
 ### Example
 
 ## Use outside of Laravel 4
-If you're not using Laravel 4, hopefully we can still get you up and running in your application.
+If you're not using Laravel 4, you should still be able to use Guzzlecal.  You'll want to make sure that you're autoloading your Composer autoloader, and if you aren't using Composer (You really should!), then you'll just have to make sure that the classes in src/Ekotechnology/Guzzlecal get loaded.
