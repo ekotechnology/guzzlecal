@@ -184,7 +184,12 @@ class Oauth2 implements EventSubscriberInterface {
 					}
 				}
 			}
-			return true;
+			if (array_key_exists('state', $this->input)) {
+				return $this->input['state'];
+			}
+			else {
+				return true;
+			}
 		}
 		else {
 			throw new UnexpectedInput;
