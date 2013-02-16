@@ -35,7 +35,7 @@ Google Calendar Client that uses [Guzzle](http://guzzlephp.org) at its core.
 
 ## Installation
 ### Install via Composer
-Depending on what version of Guzzlecal you want to use, your settings will vary.  The goal is to keep the most stable version of this package in master, with the develop branch containing bleeding edge changes.  When you want to lock in to a specific version (and you _should_ for anything important), then you'll want to use a require line in your composer.json that might look like `"ekotechnology/guzzlecal": "0.2"`, etc.  If you want to follow along with the bleeding edge (_Not suggested for anything important._), you can do `"ekotechnology/guzzlecal": "dev-develop"` as your requirement.
+Depending on what version of Guzzlecal you want to use, your settings will vary.  The goal is to keep the most stable version of this package in master, with the develop branch containing bleeding edge changes.  When you want to lock in to a specific version (and you _should_ for anything important), then you'll want to use a require line in your composer.json that might look like `"ekotechnology/guzzlecal": "0.2"`, etc.  If you want to follow along with the bleeding edge ( _This is **not** suggested for anything important_. ), you can do `"ekotechnology/guzzlecal": "dev-develop"` as your requirement.
 
 If you'd rather not muck around with your composer.json manually, you can just search for Guzzlecal when adding requirements with the composer command.
 
