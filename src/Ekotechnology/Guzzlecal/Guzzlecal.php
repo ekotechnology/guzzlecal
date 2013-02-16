@@ -59,8 +59,8 @@ class Guzzlecal {
 		return new FreeBusyQuery($this->client->post('freeBusy')->setHeader('Content-Type', 'application/json')->setBody(json_encode($params))->send()->json(), $exceptions);
 	}
 
-	public function authURL() {
-		return $this->oauth->authUrl();
+	public function authURL($state="") {
+		return $this->oauth->authUrl($state);
 	}
 
 	public function handleOauth() {
