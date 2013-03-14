@@ -28,8 +28,14 @@ class Guzzlecal {
 		return new Calendar($this->client->post('calendars')->setHeader('Content-Type', 'application/json')->setBody($cal->toJSON())->send()->json());
 	}
 
-	public function eventsList($calendar, $exceptions=array()) {
-		return new EventsList($this->client->get('calendars/' . urlencode($calendar) .'/events')->send()->json(), $exceptions);
+	public function eventsList($calendar, $parameters=array(), $exceptions=array()) {
+		$request = $this->client->get('calendars/' . urlencode($calendar) . '/events');
+		$query = $request->getQuery();
+
+		foreach ($parameters as $key => $value) {
+			$query->set($key, $value);
+		}
+		return new EventsList($request->send()->json(), $exceptions);
 	}
 
 
