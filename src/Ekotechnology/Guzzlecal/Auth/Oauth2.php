@@ -114,10 +114,10 @@ class Oauth2 implements EventSubscriberInterface {
 					if ($key == 'access_token') {
 						$storage = self::$config['storage']['token'];
 						if ($id = self::getConfig('userID') ) {
-							$storage($val);
+							$storage($val, $id);
 						}
 						else {
-							$storage($val, $id);
+							$storage($val);
 						}
 					}
 				}
@@ -184,7 +184,12 @@ class Oauth2 implements EventSubscriberInterface {
 					}
 				}
 			}
-			return true;
+			if (array_key_exists('state', $this->input)) {
+				return $this->input['state'];
+			}
+			else {
+				return true;
+			}
 		}
 		else {
 			throw new UnexpectedInput;

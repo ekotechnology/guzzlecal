@@ -28,8 +28,14 @@ class Guzzlecal {
 		return new Calendar($this->client->post('calendars')->setHeader('Content-Type', 'application/json')->setBody($cal->toJSON())->send()->json());
 	}
 
-	public function eventsList($calendar, $exceptions=array()) {
-		return new EventsList($this->client->get('calendars/' . urlencode($calendar) .'/events')->send()->json(), $exceptions);
+	public function eventsList($calendar, $parameters=array(), $exceptions=array()) {
+		$request = $this->client->get('calendars/' . urlencode($calendar) . '/events');
+		$query = $request->getQuery();
+
+		foreach ($parameters as $key => $value) {
+			$query->set($key, $value);
+		}
+		return new EventsList($request->send()->json(), $exceptions);
 	}
 
 
@@ -44,8 +50,6 @@ class Guzzlecal {
 	public function updateEvent($calendar, \Ekotechnology\Guzzlecal\Representations\Event $event) {
 		return new Event($this->client->put('calendars/' . $calendar . '/events/' . $event->id)->setHeader('Content-Type', 'application/json')->setBody($event->toJSON())->send()->json());
 	}
-
-	// public function patchEvent($calendar, )
 
 	public function freeBusy($calendars = array(), \DateTime $timeMin, \DateTime $timeMax, $exceptions=array()) {
 		foreach ($calendars as $cal) {
