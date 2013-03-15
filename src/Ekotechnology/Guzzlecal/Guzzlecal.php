@@ -51,8 +51,6 @@ class Guzzlecal {
 		return new Event($this->client->put('calendars/' . $calendar . '/events/' . $event->id)->setHeader('Content-Type', 'application/json')->setBody($event->toJSON())->send()->json());
 	}
 
-	// public function patchEvent($calendar, )
-
 	public function freeBusy($calendars = array(), \DateTime $timeMin, \DateTime $timeMax, $exceptions=array()) {
 		foreach ($calendars as $cal) {
 			$cals[] = array('id' => $cal);
