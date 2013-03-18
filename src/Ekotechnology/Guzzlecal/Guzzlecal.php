@@ -19,8 +19,11 @@ class Guzzlecal {
 
 	}
 	
-	public function calendarsList($exceptions=array()) {
+	public function calendarsList($exceptions=array(), $returnJson=false) {
 		$raw = $this->client->get('users/me/calendarList')->send()->json();
+		if ($returnJson) {
+			return $raw;			
+		}
 		return new CalendarList($raw, $exceptions);
 	}
 
@@ -28,12 +31,17 @@ class Guzzlecal {
 		return new Calendar($this->client->post('calendars')->setHeader('Content-Type', 'application/json')->setBody($cal->toJSON())->send()->json());
 	}
 
-	public function eventsList($calendar, $parameters=array(), $exceptions=array()) {
+	public function eventsList($calendar, $parameters=array(), $exceptions=array(), $returnJson=false) {
 		$request = $this->client->get('calendars/' . urlencode($calendar) . '/events');
 		$query = $request->getQuery();
 
 		foreach ($parameters as $key => $value) {
 			$query->set($key, $value);
+		}
+		$raw = $request->send()->json();
+
+		if ($returnJson) {
+			return $raw;
 		}
 		return new EventsList($request->send()->json(), $exceptions);
 	}
@@ -43,8 +51,12 @@ class Guzzlecal {
 		return new Event($this->client->post('calendars/' . $event->calendarId . '/events')->setHeader('Content-Type', 'application/json')->setBody($event->toJSON())->send()->json());
 	}
 
-	public function getEvent($calendar, $eventId, $exceptions=array()) {
-		return new Event($this->client->get('calendars/' . $calendar . '/events/' . $eventId)->send()->json(), $exceptions);
+	public function getEvent($calendar, $eventId, $exceptions=array(), $returnJson=false) {
+		$raw = $this->client->get('calendars/' . $calendar . '/events/' . $eventId)->send()->json();
+		if ($returnJson) {
+			return $raw;
+		}
+		return new Event($raw, $exceptions);
 	}
 
 	public function updateEvent($calendar, \Ekotechnology\Guzzlecal\Representations\Event $event) {
