@@ -213,4 +213,8 @@ trait RepresentationTrait {
 	function toJSON() {
 		return json_encode($this->content);
 	}
+	
+	function toArray() {
+		return $this->content;
+	}
 }
