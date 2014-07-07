@@ -45,7 +45,7 @@ trait RepresentationTrait {
 		elseif ($comparison != '' && $strict == false && $comparison != $etag) {
 			return false;
 		}
-		elseif ($comparison != '' && $strict == true && $comarison !== $etag) {
+		elseif ($comparison != '' && $strict == true && $comparison !== $etag) {
 			return false;
 		}
 		else {
